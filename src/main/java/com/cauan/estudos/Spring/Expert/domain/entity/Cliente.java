@@ -3,6 +3,8 @@ package com.cauan.estudos.Spring.Expert.domain.entity;
 import com.cauan.estudos.Spring.Expert.repository.ClienteRepository;
 import jakarta.persistence.*;
 
+import java.util.Set;
+
 @Entity
 @Table(name = "TB_CLIENTE")
 public class Cliente {
@@ -12,8 +14,20 @@ public class Cliente {
     private Long id;
     private String nome;
 
+    @OneToMany(mappedBy = "cliente")
+    private Set<Pedido> pedidos; //Retornar os pedidos do cliente
+
     public Cliente(){
 
+    }
+
+    public Set<Pedido> pedidos() {
+        return pedidos;
+    }
+
+    public Cliente setPedidos(Set<Pedido> pedidos) {
+        this.pedidos = pedidos;
+        return this;
     }
 
     public Cliente(String nome) {
