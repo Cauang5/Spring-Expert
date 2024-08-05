@@ -1,5 +1,6 @@
 package com.cauan.estudos.Spring.Expert.domain.entity;
 
+import com.cauan.estudos.Spring.Expert.repository.ClienteRepository;
 import jakarta.persistence.*;
 
 @Entity
@@ -10,6 +11,14 @@ public class Cliente {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String nome;
+
+    public Cliente(){
+
+    }
+
+    public Cliente(String nome) {
+        this.nome = nome;
+    }
 
     public Long id() {
         return id;
