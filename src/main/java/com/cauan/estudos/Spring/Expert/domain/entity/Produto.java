@@ -1,18 +1,24 @@
 package com.cauan.estudos.Spring.Expert.domain.entity;
 
+import jakarta.persistence.*;
+
 import java.math.BigDecimal;
 
+@Entity
+@Table(name = "TB_PRODUTO")
 public class Produto {
 
-    private Integer id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
     private String descricao;
     private BigDecimal preco;
 
-    public Integer id() {
+    public Long id() {
         return id;
     }
 
-    public Produto setId(Integer id) {
+    public Produto setId(Long id) {
         this.id = id;
         return this;
     }

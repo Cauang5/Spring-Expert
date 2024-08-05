@@ -1,15 +1,21 @@
 package com.cauan.estudos.Spring.Expert.domain.entity;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "TB_CLIENTE")
 public class Cliente {
 
-    private Integer id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
     private String nome;
 
-    public Integer id() {
+    public Long id() {
         return id;
     }
 
-    public Cliente setId(Integer id) {
+    public Cliente setId(Long id) {
         this.id = id;
         return this;
     }

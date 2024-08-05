@@ -1,17 +1,28 @@
 package com.cauan.estudos.Spring.Expert.domain.entity;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "TB_ITEMPEDIDO")
 public class ItemPedido {
 
-    private Integer id;
-    private Pedido pedido;
-    private Produto produto;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
     private Integer quantidade;
 
-    public Integer id() {
+    @ManyToOne
+    @JoinColumn(name = "pedido_id")
+    private Pedido pedido;
+    @ManyToOne
+    @JoinColumn(name = "produto_id")
+    private Produto produto;
+
+    public Long id() {
         return id;
     }
 
-    public ItemPedido setId(Integer id) {
+    public ItemPedido setId(Long id) {
         this.id = id;
         return this;
     }

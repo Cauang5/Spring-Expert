@@ -1,31 +1,31 @@
 package com.cauan.estudos.Spring.Expert.domain.entity;
 
+import jakarta.persistence.*;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Date;
 
+@Entity
+@Table(name = "TB_PEDIDO")
 public class Pedido {
 
-    private Integer id;
-    private Cliente cliente;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
     private LocalDate dataPedido;
     private BigDecimal total;
 
-    public Integer id() {
+    @ManyToOne
+    @JoinColumn(name = "cliente_id")
+    private Cliente cliente;
+
+
+    public Long id() {
         return id;
     }
 
-    public Pedido setId(Integer id) {
+    public Pedido setId(Long id) {
         this.id = id;
-        return this;
-    }
-
-    public Cliente cliente() {
-        return cliente;
-    }
-
-    public Pedido setCliente(Cliente cliente) {
-        this.cliente = cliente;
         return this;
     }
 
