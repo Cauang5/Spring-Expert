@@ -1,6 +1,6 @@
 package com.cauan.estudos.Spring.Expert.domain.entity;
 
-import com.cauan.estudos.Spring.Expert.repository.ClienteRepository;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.Set;
@@ -14,14 +14,15 @@ public class Cliente {
     private Long id;
     private String nome;
 
-    @OneToMany(mappedBy = "cliente")
+    @JsonIgnore // Ignora a propriedade, não associando os pedidos do cliente.
+    @OneToMany(mappedBy = "cliente", fetch = FetchType.LAZY)
     private Set<Pedido> pedidos; //Retornar os pedidos do cliente
 
     public Cliente(){
 
     }
 
-    public Set<Pedido> pedidos() {
+    public Set<Pedido> getPedidos() {
         return pedidos;
     }
 
@@ -34,7 +35,7 @@ public class Cliente {
         this.nome = nome;
     }
 
-    public Long id() {
+    public Long getId() {
         return id;
     }
 
@@ -43,12 +44,21 @@ public class Cliente {
         return this;
     }
 
-    public String nome() {
+    public String getNome() {
         return nome;
     }
 
     public Cliente setNome(String nome) {
         this.nome = nome;
         return this;
+    }
+
+    @Override
+    public String toString() {
+        return "Cliente{" +
+                "id=" + id +
+                ", nome='" + nome + '\'' +
+                ", pedidos=" + pedidos +
+                '}';
     }
 }
