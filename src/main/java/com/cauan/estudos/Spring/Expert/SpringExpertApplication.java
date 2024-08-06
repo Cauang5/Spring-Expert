@@ -17,18 +17,4 @@ public class SpringExpertApplication {
         SpringApplication.run(SpringExpertApplication.class, args);
     }
 
-    @Bean
-    CommandLineRunner init(ClienteRepository clienteRepository) {
-        return args -> {
-            System.out.println("Salvando clientes");
-            clienteRepository.save(new Cliente("José"));
-            clienteRepository.save(new Cliente("Carlos"));
-            clienteRepository.save(new Cliente("Carlos Roberto"));
-            clienteRepository.save(new Cliente("Carlos Pereira"));
-
-            List<Cliente> allClientes = clienteRepository.findByNomeLike("%Carlos%");
-            allClientes.forEach(cliente -> System.out.println(cliente.nome()));
-
-        };
-    }
 }
