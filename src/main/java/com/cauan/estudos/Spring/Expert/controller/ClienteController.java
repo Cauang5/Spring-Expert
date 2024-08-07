@@ -5,11 +5,13 @@ import com.cauan.estudos.Spring.Expert.service.ClienteService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
 
 @RestController
+@RequestMapping("/clientes")
 public class ClienteController {
 
 
@@ -19,46 +21,38 @@ public class ClienteController {
         this.clienteService = clienteService;
     }
 
-    @PostMapping("/cliente")
+    @PostMapping
     public ResponseEntity<Cliente> createCliente(@RequestBody Cliente cliente) {
         Cliente savedCliente = clienteService.create(cliente);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedCliente);
     }
 
-    @GetMapping("/cliente")
+    @GetMapping
     public ResponseEntity<List<Cliente>> getAllClientes() {
-        return ResponseEntity.status(HttpStatus.OK).body(clienteService.listAll());
+        List<Cliente> clientes = clienteService.listAll();
+        return ResponseEntity.status(HttpStatus.OK).body(clientes);
     }
 
-    @GetMapping("/cliente/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<Cliente> getClienteById(@PathVariable Long id) {
         Optional<Cliente> cliente = clienteService.findById(id);
-        if (cliente.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-
-        return ResponseEntity.status(HttpStatus.OK).body(cliente.get());
+        return cliente.map(ResponseEntity::ok)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente não encontrado"));
     }
 
-    @DeleteMapping("/cliente/{id}")
-    public ResponseEntity<Cliente> delete (@PathVariable Long id){
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Cliente> deleteCliente (@PathVariable Long id){
         Optional<Cliente> cliente = clienteService.delete(id);
-        if (cliente.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        if (cliente.isPresent()){
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }
-
-        clienteService.delete(id);
-        // Ideal seria utilizar NO_CONTENT (204), porem, ele não deve receber um corpo na requisição
-        return ResponseEntity.status(HttpStatus.OK).build();
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
-    @PutMapping("/cliente/{id}")
-    public ResponseEntity<Cliente> update(@PathVariable Long id, @RequestBody Cliente cliente){
-        Optional<Cliente> clienteAtt = clienteService.update(id, cliente);
-        if (clienteAtt.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }else {
-            return ResponseEntity.status(HttpStatus.OK).build();
-        }
+    @PutMapping("/{id}")
+    public ResponseEntity<Cliente> updateCliente(@PathVariable Long id, @RequestBody Cliente clienteAtualizado){
+        Optional<Cliente> cliente = clienteService.update(id, clienteAtualizado);
+        return cliente.map(updateCliente -> ResponseEntity.ok(updateCliente))
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente não encontrado"));
     }
 }
