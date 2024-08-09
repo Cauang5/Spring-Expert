@@ -1,9 +1,17 @@
 package com.cauan.estudos.Spring.Expert.domain.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "TB_ITEMPEDIDO")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class ItemPedido {
 
     @Id
@@ -19,39 +27,4 @@ public class ItemPedido {
     @JoinColumn(name = "produto_id")
     private Produto produto;
 
-    public Long id() {
-        return id;
-    }
-
-    public ItemPedido setId(Long id) {
-        this.id = id;
-        return this;
-    }
-
-    public Pedido pedido() {
-        return pedido;
-    }
-
-    public ItemPedido setPedido(Pedido pedido) {
-        this.pedido = pedido;
-        return this;
-    }
-
-    public Produto produto() {
-        return produto;
-    }
-
-    public ItemPedido setProduto(Produto produto) {
-        this.produto = produto;
-        return this;
-    }
-
-    public Integer quantidade() {
-        return quantidade;
-    }
-
-    public ItemPedido setQuantidade(Integer quantidade) {
-        this.quantidade = quantidade;
-        return this;
-    }
 }
