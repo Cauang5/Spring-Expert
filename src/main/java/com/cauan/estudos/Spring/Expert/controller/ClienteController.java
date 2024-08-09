@@ -14,7 +14,6 @@ import java.util.Optional;
 @RequestMapping("/clientes")
 public class ClienteController {
 
-
     private ClienteService clienteService;
 
     public ClienteController(ClienteService clienteService) {
@@ -41,16 +40,16 @@ public class ClienteController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Cliente> deleteCliente (@PathVariable Long id){
+    public ResponseEntity<Cliente> deleteCliente(@PathVariable Long id) {
         Optional<Cliente> cliente = clienteService.delete(id);
-        if (cliente.isPresent()){
+        if (cliente.isPresent()) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente não encontrado");
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Cliente> updateCliente(@PathVariable Long id, @RequestBody Cliente clienteAtualizado){
+    public ResponseEntity<Cliente> updateCliente(@PathVariable Long id, @RequestBody Cliente clienteAtualizado) {
         Optional<Cliente> cliente = clienteService.update(id, clienteAtualizado);
         return cliente.map(updateCliente -> ResponseEntity.ok(updateCliente))
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente não encontrado"));

@@ -14,7 +14,7 @@ public class Produto {
     private String descricao;
     private BigDecimal preco;
 
-    public Long id() {
+    public Long getId() {
         return id;
     }
 
@@ -23,7 +23,11 @@ public class Produto {
         return this;
     }
 
-    public String descricao() {
+    public Produto(){
+
+    }
+
+    public String getDescricao() {
         return descricao;
     }
 
@@ -32,12 +36,21 @@ public class Produto {
         return this;
     }
 
-    public BigDecimal preco() {
+    public BigDecimal getPreco() {
         return preco;
     }
 
     public Produto setPreco(BigDecimal preco) {
         this.preco = preco;
         return this;
+    }
+
+    @Override
+    public String toString() {
+        return "Produto{" +
+                "id=" + id +
+                ", descricao='" + descricao + '\'' +
+                ", preco=" + preco +
+                '}';
     }
 }

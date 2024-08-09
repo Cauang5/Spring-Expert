@@ -19,13 +19,21 @@ public class Pedido {
     @JoinColumn(name = "cliente_id")
     private Cliente cliente;
 
-
     public Long id() {
         return id;
     }
 
     public Pedido setId(Long id) {
         this.id = id;
+        return this;
+    }
+
+    public Cliente cliente() {
+        return cliente;
+    }
+
+    public Pedido setCliente(Cliente cliente) {
+        this.cliente = cliente;
         return this;
     }
 
@@ -45,5 +53,15 @@ public class Pedido {
     public Pedido setTotal(BigDecimal total) {
         this.total = total;
         return this;
+    }
+
+    @Override
+    public String toString() {
+        return "Pedido{" +
+                "id=" + id +
+                ", dataPedido=" + dataPedido +
+                ", total=" + total +
+                ", cliente=" + cliente +
+                '}';
     }
 }

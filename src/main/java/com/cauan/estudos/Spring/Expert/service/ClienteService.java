@@ -32,13 +32,12 @@ public class ClienteService {
         return clienteRepository.findById(id);
     }
 
-    public Optional<Cliente> update(Long id, Cliente cliente){
-        return clienteRepository.findById(id).map(clienteExiste -> {
-            clienteExiste.setNome(cliente.getNome());
-
-            clienteRepository.save(clienteExiste);
-            return clienteExiste;
-        });
+    public Optional<Cliente> update(Long id, Cliente cliente) {
+        return clienteRepository.findById(id)
+                .map(clienteExiste -> {
+                    clienteExiste.setNome(cliente.getNome());
+                    return clienteRepository.save(clienteExiste);
+                });
     }
 
     public Optional<Cliente> delete(Long id) {
@@ -51,11 +50,9 @@ public class ClienteService {
         }
     }
 
-
-
-    @Transactional
+   /* @Transactional
     public Cliente findClienteFetchPedidos(Long id) {
         return clienteRepository.findClienteFetchPedidos(id);
     }
-
+*/
 }
