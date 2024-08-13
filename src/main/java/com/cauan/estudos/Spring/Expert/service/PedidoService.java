@@ -1,10 +1,8 @@
 package com.cauan.estudos.Spring.Expert.service;
 
-import ch.qos.logback.core.net.server.Client;
 import com.cauan.estudos.Spring.Expert.DTO.ItemPedidoDTO;
 import com.cauan.estudos.Spring.Expert.DTO.PedidoDTO;
-import com.cauan.estudos.Spring.Expert.Exception.PedidoNaoEncontradoException;
-import com.cauan.estudos.Spring.Expert.domain.entity.Cliente;
+import com.cauan.estudos.Spring.Expert.Exception.RegraNegocioException;
 import com.cauan.estudos.Spring.Expert.domain.entity.ItemPedido;
 import com.cauan.estudos.Spring.Expert.domain.entity.Pedido;
 import com.cauan.estudos.Spring.Expert.domain.entity.Produto;
@@ -14,7 +12,6 @@ import com.cauan.estudos.Spring.Expert.repository.PedidoRepository;
 import com.cauan.estudos.Spring.Expert.repository.ProdutoRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -35,7 +32,7 @@ public class PedidoService {
     public Pedido criarPedido(PedidoDTO dto){
         var cliente = clienteRepository
                 .findById(dto.getCliente())
-                .orElseThrow(() -> new PedidoNaoEncontradoException("Código do cliente inválido"));
+                .orElseThrow(() -> new RegraNegocioException("Código do cliente inválido"));
 
         var pedido = new Pedido();
         pedido.setCliente(cliente);
@@ -54,7 +51,7 @@ public class PedidoService {
     public PedidoDTO findByID(Long id){
         var pedido = pedidoRepository
                 .findById(id)
-                .orElseThrow(() -> new PedidoNaoEncontradoException("Pedido não encontrado pelo ID: " +id));
+                .orElseThrow(() -> new RegraNegocioException("Pedido não encontrado pelo ID: " +id));
 
         return converterParaDTO(pedido);
     }
@@ -62,11 +59,11 @@ public class PedidoService {
     public PedidoDTO atualizarPedido(Long id, PedidoDTO dto){
         var pedidoExistente = pedidoRepository
                 .findById(id)
-                .orElseThrow(() -> new PedidoNaoEncontradoException("Pedido não encontrado pelo ID: " +id));
+                .orElseThrow(() -> new RegraNegocioException("Pedido não encontrado pelo ID: " +id));
 
         var cliente = clienteRepository
                 .findById(dto.getCliente())
-                .orElseThrow(() -> new RuntimeException("Cliente não encontrado pelo ID: " + dto.getCliente()));
+                .orElseThrow(() -> new RegraNegocioException("Cliente não encontrado pelo ID: " + dto.getCliente()));
 
         pedidoExistente.setTotal(dto.getTotal());
         pedidoExistente.setItens(converterItens(pedidoExistente, dto.getItens()));
@@ -79,7 +76,7 @@ public class PedidoService {
     public void deletarPedido(Long id){
         Pedido pedido = pedidoRepository
                 .findById(id)
-                .orElseThrow(() -> new RuntimeException("Pedido não encontrado"));
+                .orElseThrow(() -> new RegraNegocioException("Pedido não encontrado"));
 
         pedidoRepository.delete(pedido);
     }
@@ -111,7 +108,7 @@ public class PedidoService {
     //Método para converter uma lista de ItemPedido para uma lista de itemPedido
     private List<ItemPedido> converterItens(Pedido pedido, List<ItemPedidoDTO> itens){
         if (itens.isEmpty()){
-            throw new RuntimeException("Não é possível realizar um pedido sem item");
+            throw new RegraNegocioException("Não é possível realizar um pedido sem item");
         }
 
         return itens
@@ -120,7 +117,7 @@ public class PedidoService {
                     Long idProduto = dto.getProduto();
                     Produto produto = produtoRepository
                             .findById(idProduto)
-                            .orElseThrow(() -> new RuntimeException("Código de produto inválido" +idProduto));
+                            .orElseThrow(() -> new RegraNegocioException("Código de produto inválido" +idProduto));
 
                     var itemPedido = new ItemPedido();
                     itemPedido.setQuantidade(dto.getQuantidade());
